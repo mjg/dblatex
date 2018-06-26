@@ -26,7 +26,7 @@ from distutils.command.sdist import sdist
 from distutils import log
 from subprocess import Popen, PIPE
 sys.path.append("lib")
-from contrib.debian.installer import DebianInstaller
+#from contrib.debian.installer import DebianInstaller
 
 #
 # Build the command line script
@@ -373,10 +373,10 @@ class Install(install):
             raise OSError("not found: %s" % ", ".join(mis_stys))
 
     def run(self):
-        if self.install_layout == "deb":
-            db = DebianInstaller(self)
-        else:
-            db = None
+#        if self.install_layout == "deb":
+#            db = DebianInstaller(self)
+#        else:
+        db = None
 
         if not(db) and not(self.nodeps):
             try:
