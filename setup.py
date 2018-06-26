@@ -208,17 +208,15 @@ class Build(build):
 
 
 def find_programs(utils):
-    sys.path.append("lib")
-    from contrib.which import which
+    import shutil
     util_paths = {}
     missed = []
     for util in utils:
-        try:
-            path = which.which(util)
+        path = shutil.which(util)
+        if path:
             util_paths[util] = path
-        except which.WhichError:
+        else:
             missed.append(util)
-    sys.path.remove("lib")
     return (util_paths, missed)
 
 def kpsewhich(tex_file):
