@@ -17,6 +17,7 @@ except ImportError:
 import glob
 import imp
 from optparse import OptionParser
+from io import open
 
 from dbtexmf.core.txtparser import texinputs_parse, texstyle_parse
 from dbtexmf.core.confparser import DbtexConfig
@@ -53,24 +54,36 @@ class Document:
     def has_subext(self, ext):
         return (os.path.splitext(self.basename)[1] == ext)
 
-    def __cmp__(self, other):
-        """
-        Comparaison method mainly to check if the document is in a list
-        """
-        if cmp(self.rawfile, other) == 0:
-            return 0
-        if cmp(self.texfile, other) == 0:
-            return 0
-        if cmp(self.binfile, other) == 0:
-            return 0
-        return -1
+    def __eq__(self, other):
+        if self.rawfile == other:
+            return True
+        if self.texfile == other:
+            return True
+        if self.binfile == other:
+            return True
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        return self.__ne__(other)
+
+    def __le__(self, other):
+        return False
+
+    def __gt__(self, other):
+        return False
+
+    def __ge__(self, other):
+        return False
 
 
 class DbTex:
     USE_MKLISTINGS = 1
 
     xsl_header = \
-"""<?xml version="1.0"?>
+u"""<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 version="1.0">
@@ -188,7 +201,7 @@ class DbTex:
         self.flags &= ~what
 
     def get_version(self):
-        f = file(os.path.join(self.topdir, "xsl", "version.xsl"))
+        f = open(os.path.join(self.topdir, "xsl", "version.xsl"), "rt", encoding="latin-1")
         versions = re.findall("<xsl:variable[^>]*>([^<]*)<", f.read())
         f.close()
         if versions:
@@ -201,11 +214,11 @@ class DbTex:
             self.xslbuild = self.xslmain
             return
 
-        f = file(wrapper, "w")
+        f = open(wrapper, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
         for xsluser in self.xslusers:
-            f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
+            f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
 
         # Reverse to set the latest parameter first (case of overriding)
         self.xslparams.reverse()
@@ -236,8 +249,8 @@ class DbTex:
                               self.listings, opts=self.xslopts, params=param)
         else:
             self.log.info("No external file support")
-            f = file(self.listings, "w")
-            f.write("<listings/>\n")
+            f = open(self.listings, "wt", encoding="latin-1")
+            f.write(u"<listings/>\n")
             f.close()
 
     def _single_setup(self):
@@ -259,7 +272,7 @@ class DbTex:
                           "Use the working directory")
             self.outputdir = self.cwdir
 
-        f = open(doclist)
+        f = open(doclist, "rt", encoding="latin-1")
         books = f.readlines()
         f.close()
 
@@ -273,11 +286,11 @@ class DbTex:
         # set list
         self.log.info("Build the book set list...")
         xslset = "doclist.xsl"
-        f = file(xslset, "w")
+        f = open(xslset, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
-        f.write('</xsl:stylesheet>\n')
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
+        f.write(u'</xsl:stylesheet>\n')
         f.close()
 
         doclist = os.path.join(self.tmpdir, "doclist.txt")
@@ -374,7 +387,7 @@ class DbTex:
 
         # Need to dump the stdin input, because of the two passes
         self.input = os.path.join(self.tmpdir, "stdin.xml")
-        f = open(self.input, "w")
+        f = open(self.input, "wt", encoding="latin-1")
         for line in sys.stdin:
             f.write(line)
         f.close()
@@ -402,13 +415,13 @@ class DbTex:
         # For easy debug
         if self.debug and "TEXINPUTS" in os.environ:
             if os.name != "nt":
-                f = file("env_tex", "w")
-                f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \
+                f = open("env_tex", "wt")
+                f.write(u"TEXINPUTS=%s\nexport TEXINPUTS\n" % \
                         os.environ["TEXINPUTS"])
                 f.close()
             else:
-                f = file("env_tex.bat", "w")
-                f.write("set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
+                f = open("env_tex.bat", "wt")
+                f.write(u"set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
                 f.close()
 
         # Build the tex file(s), and compile it(them)

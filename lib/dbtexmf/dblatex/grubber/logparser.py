@@ -8,6 +8,7 @@ This module defines the class that parses the LaTeX log files.
 from __future__ import generators
 
 import re
+from io import open
 
 from dbtexmf.dblatex.grubber.msg import _, msg
 
@@ -51,7 +52,7 @@ class LogParser:
         """
         self.lines = []
         try:
-            file = open(name)
+            file = open(name, "rt")
         except IOError:
             return 2
         line = file.readline()

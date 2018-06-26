@@ -10,6 +10,7 @@ import sys
 import re
 import glob
 import subprocess
+from io import open
 
 try:
     from setuptools import setup
@@ -164,8 +165,8 @@ os.environ["SGML_CATALOG_FILES"] = cat
         script = self.SHELL_SCRIPT % script_args
         script_name = os.path.basename(script_name)
         outfile = os.path.join(self.build_dir, script_name)
-        fd = os.open(outfile, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0755)
-        os.write(fd, script)
+        fd = os.open(outfile, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0o755)
+        os.write(fd, script.encode('ascii'))
         os.close(fd)
 
 
@@ -227,8 +228,10 @@ def kpsewhich(tex_file):
         close_fds = True
     p = Popen("kpsewhich %s" % tex_file, shell=True,
               stdin=PIPE, stdout=PIPE, close_fds=close_fds)
-    out = "".join(p.stdout.readlines()).strip()
-    return out
+    data = p.communicate()[0]
+    if isinstance(data, bytes):
+        data = data.decode(sys.getdefaultencoding())
+    return data.strip()
 
 
 class Sdist(sdist):
@@ -324,7 +327,7 @@ class Install(install):
         used_stys = []
         re_sty = re.compile(r"\\usepackage\s*\[?.*\]?{(\w+)}")
         for sty in stys:
-            f = open(sty)
+            f = open(sty, "rt", encoding="latin-1")
             for line in f:
                 line = line.split("%")[0]
                 m = re_sty.search(line)
@@ -452,17 +455,17 @@ class InstallData(install_data):
             return
 
         # Grab the value from package version
-        d = open(hyper_sty).read()
+        d = open(hyper_sty, "rt", encoding="latin-1").read()
         m = re.search(r"\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
         if not(m):
             return
         year = m.group(1)
 
         # Patch the parameter with the found value
-        p = open(param_file).read()
+        p = open(param_file, "rt", encoding="latin-1").read()
         p2 = re.sub('name="texlive.version">.*<',
                     'name="texlive.version">%s<' % year, p)
-        f = open(param_file, "w")
+        f = open(param_file, "wt", encoding="latin-1")
         f.write(p2)
         f.close()
 

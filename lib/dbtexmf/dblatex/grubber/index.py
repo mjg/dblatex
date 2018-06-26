@@ -38,6 +38,7 @@ this argument, they apply to all indices declared at the point where they
 occur.
 """
 
+import sys
 import os
 from os.path import *
 import re, string
@@ -45,6 +46,8 @@ import subprocess
 import xml.dom.minidom
 
 from subprocess import Popen, PIPE
+from io import open
+
 from dbtexmf.dblatex.grubber.msg import _, msg
 from dbtexmf.dblatex.grubber.plugins import TexModule
 from dbtexmf.dblatex.grubber.util import md5_file
@@ -133,7 +136,7 @@ class Xindy:
         # Texindy produces latin-* indexes. Try to find out which one from
         # the modules loaded by the script (language dependent)
         re_lang = re.compile("loading module \"lang/.*/(latin[^.-]*)")
-        logfile = open(logname)
+        logfile = open(logname, "rt", encoding="latin-1")
         encoding = ""
         for line in logfile:
             m = re_lang.search(line)
@@ -145,7 +148,7 @@ class Xindy:
         return encoding
 
     def _index_is_unicode(self):
-        f = file(self.target, "r")
+        f = open(self.target, "rb")
         is_unicode = True 
         for line in f:
             try:
@@ -162,20 +165,20 @@ class Xindy:
         # with Xindy. If not, the following error is raised by Xindy:
         # "WARNING: unknown cross-reference-class `hyperindexformat'! (ignored)"
         #
-        f = file(self.idxfile, "r")
+        f = open(self.idxfile, "rt", encoding="latin-1")
         data = f.read()
         f.close()
         data, nsub = self._re_hyperindex.subn(r"\1}{", data)
         if not(nsub):
             return
         msg.debug("Remove %d unsupported 'hyperindexformat' calls" % nsub)
-        f = file(self.idxfile, "w")
+        f = open(self.idxfile, "wt", encoding="latin-1")
         f.write(data)
         f.close()
 
     def _fix_invalid_ranges(self):
         if not(self.invalid_index_ranges): return
-        f = open(self.idxfile)
+        f = open(self.idxfile, "rt", encoding="latin-1")
         lines = f.readlines()
         f.close()
 
@@ -199,7 +202,7 @@ class Xindy:
         skip_lines.reverse()
         for line_num in skip_lines:
             del lines[line_num]
-        f = open(self.idxfile, "w")
+        f = open(self.idxfile, "wt", encoding="latin-1")
         f.writelines(lines)
         f.close()
 
@@ -232,9 +235,11 @@ class Xindy:
 
         # Collect the script output, and errors
         logname = join(dirname(self.target), "xindy.log")
-        logfile = open(logname, "w")
+        logfile = open(logname, "wb")
         p = Popen(cmd, stdout=logfile, stderr=PIPE)
         errdata = p.communicate()[1]
+        if isinstance(errdata, bytes):
+            errdata = errdata.decode(sys.getdefaultencoding())
         rc = p.wait()
         if msg.stdout:
             msg.stdout.write(errdata)
@@ -330,7 +335,7 @@ class Makeindex:
         return cmd
 
     def _index_is_unicode(self):
-        f = file(self.target, "r")
+        f = open(self.target, "rb")
         is_unicode = True 
         for line in f:
             try:

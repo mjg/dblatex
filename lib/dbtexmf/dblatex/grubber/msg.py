@@ -9,6 +9,7 @@ msg object.
 import os, os.path
 import sys
 import logging
+from io import open
 
 def _(txt): return txt
 
@@ -34,7 +35,7 @@ class Message (object):
         self._log = logging.getLogger("dblatex")
         level = self._log.getEffectiveLevel()
         if level >= logging.WARNING:
-            self.stdout = open(os.devnull, "w")
+            self.stdout = open(os.devnull, "wb")
         else:
             self.stdout = None
 

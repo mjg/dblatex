@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import subprocess
+from io import open
 
 from dbtexmf.dblatex.grubber.msg import _, msg
 from dbtexmf.dblatex.grubber.util import Watcher
@@ -122,7 +123,7 @@ class Latex(Depend):
         Prepare the compilation by parsing the source file. The parsing
         loads all the necessary modules required by the packages used, etc.
         """
-        f = open(self.srcfile)
+        f = open(self.srcfile, "rt", encoding="latin-1")
         self.parser.parse(f, exclude_mods=exclude_mods)
         f.close()
 

@@ -18,6 +18,7 @@ import os, sys
 from os.path import *
 import re, string
 import subprocess
+from io import open
 
 #from grubber import _
 #from grubber import *
@@ -174,7 +175,7 @@ class BibTex(TexModule):
                         pkg="bibtex")
                 return 1
 
-        blg = open(self.blgfile)
+        blg = open(self.blgfile, "rt", encoding="latin-1")
         for line in blg.readlines():
             if re_error.search(line):
                 blg.close()
@@ -202,7 +203,7 @@ class BibTex(TexModule):
             auxfiles.append(self.auxfile)
 
         for auxname in auxfiles:
-            aux = open(auxname)
+            aux = open(auxname, "rt", encoding="latin-1")
             for line in aux:
                 m = re_citation.match(line)
                 if m:
@@ -358,7 +359,7 @@ class BibTex(TexModule):
         """
         if not exists(self.blgfile):
             return 0
-        log = open(self.blgfile)
+        log = open(self.blgfile, "rt", encoding="latin-1")
         line = log.readline()
         while line != "":
             if line.startswith("The style file: "):
@@ -376,7 +377,7 @@ class BibTex(TexModule):
         """
         if not exists(self.blgfile):
             return
-        log = open(self.blgfile)
+        log = open(self.blgfile, "rt", encoding="latin-1")
         last_line = ""
         for line in log:
             m = re_error.search(line)

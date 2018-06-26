@@ -9,6 +9,7 @@ using pdfTeX.
 The module optimizes the pdflatex calls by setting -draftmode and apply a last
 call to build the final PDF output.
 """
+import sys
 import os
 import re
 import subprocess
@@ -73,6 +74,8 @@ class Module (TexModule):
         # Grab the major version number
         p = Popen("pdflatex -version", shell=True, stdout=PIPE)
         data = p.communicate()[0]
+        if isinstance(data, bytes):
+            data = data.decode(sys.getdefaultencoding())
         m = re.search(r"pdfTeX.*3.14[^-]*-(\d*.\d*)", data, re.M)
         if not(m):
             return ""

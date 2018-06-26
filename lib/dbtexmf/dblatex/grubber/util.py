@@ -11,6 +11,8 @@ except ImportError:
     # Fallback for python 2.4:
     import md5 as hashlib
 import os
+from io import open
+
 from dbtexmf.dblatex.grubber.msg import _, msg
 
 
@@ -19,7 +21,7 @@ def md5_file(fname):
     Compute the MD5 sum of a given file.
     """
     m = hashlib.md5()
-    file = open(fname)
+    file = open(fname, "rb")
     for line in file.readlines():
         m.update(line)
     file.close()
