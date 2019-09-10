@@ -44,12 +44,14 @@ manpagegz: version.xml
 	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
 # Build the HTML version of the documentation
-$(HTMLDIRUM)/index.html: manual.xml
+FIGURES=pagesetup2.pdf
+
+$(HTMLDIRUM)/index.html: manual.xml $(FIGURES)
 	@$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
-	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
-	convert -trim pagesetup2.fig $(HTMLDIRUM)/pagesetup2.png
+	convert -trim -rotate 90 processus.eps $(HTMLDIRUM)/processus.png
+	convert -trim pagesetup2.pdf $(HTMLDIRUM)/pagesetup2.png
 	$(CP) *.png tables/*.png $(HTMLDIRUM)/.
 	$(CP) -r math/figures $(HTMLDIRUM)/.
 	$(CP) -r $(XSLDBK)/images $(HTMLDIRUM)/.
