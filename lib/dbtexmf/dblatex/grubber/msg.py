@@ -66,7 +66,7 @@ class Message (object):
             if text[0:13] == "LaTeX Error: ":
                 text = text[13:]
             self._log.error(self.format_pos(info, text))
-            if info.has_key("code") and info["code"] and not self.short:
+            if "code" in info and info["code"] and not self.short:
                 self._log.error(self.format_pos(info,
                     _("leading text: ") + info["code"]))
 
@@ -100,24 +100,24 @@ class Message (object):
         the dictionary given as first argument.
         """
         if len(self.pos) > 0:
-            if where is None or not where.has_key("file"):
+            if where is None or "file" not in where:
                 where = self.pos[-1]
         elif where is None or where == {}:
             return text
 
-        if where.has_key("file") and where["file"] is not None:
+        if "file" in where and where["file"] is not None:
             pos = self.simplify(where["file"])
-            if where.has_key("line") and where["line"]:
+            if "line" in where and where["line"]:
                 pos = "%s:%d" % (pos, int(where["line"]))
-                if where.has_key("last"):
+                if "last" in where:
                     if where["last"] != where["line"]:
                         pos = "%s-%d" % (pos, int(where["last"]))
             pos = pos + ": "
         else:
             pos = ""
-        if where.has_key("page"):
+        if "page" in where:
             text = "%s (page %d)" % (text, int(where["page"]))
-        if where.has_key("pkg"):
+        if "pkg" in where:
             text = "[%s] %s" % (where["pkg"], text)
         return pos + text
 

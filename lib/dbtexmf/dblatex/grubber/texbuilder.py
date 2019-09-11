@@ -90,7 +90,7 @@ class LatexBuilder:
         self.tex.prepare()
 
         # Set the index configuration
-        if self.tex.modules.has_key("makeidx"):
+        if "makeidx" in self.tex.modules:
             idx = self.tex.modules["makeidx"]
             if self.index.style: idx.do_style(self.index.style)
             if self.index.tool: idx.do_tool(self.index.tool)

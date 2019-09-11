@@ -111,7 +111,7 @@ class BibTex(TexModule):
         """
         if self.style:
             old_bst = self.style + ".bst"
-            if exists(old_bst) and self.doc.sources.has_key(old_bst):
+            if exists(old_bst) and old_bst in self.doc.sources:
                 del self.doc.sources[old_bst]
 
         self.style = style
@@ -207,7 +207,7 @@ class BibTex(TexModule):
                 m = re_citation.match(line)
                 if m:
                     cite = m.group("cite")
-                    if not cites.has_key(cite):
+                    if cite not in cites:
                         last = last + 1
                         cites[cite] = last
                     continue
@@ -400,9 +400,9 @@ class BibTex(TexModule):
                 file = d["file"]
                 if file[-4:] == ".bib":
                     file = file[:-4]
-                if self.db.has_key(file):
+                if file in self.db:
                     d["file"] = self.db[file]
-                elif self.db.has_key(file + ".bib"):
+                elif file + ".bib" in self.db:
                     d["file"] = self.db[file + ".bib"]
                 yield d
             last_line = line

@@ -1494,7 +1494,7 @@ class FontManager:
 
     def get_pdffont(self, fontobj, fontsize):
         key = fontobj.descriptor.get("/BaseFont")+"/"+"%6.2f" % fontsize
-        if self.fontused.has_key(key):
+        if key in self.fontused:
             return self.fontused.get(key)
         elif self.global_fontmgr:
             pdffont = self.global_fontmgr.get_pdffont(fontobj, fontsize)
@@ -1517,7 +1517,7 @@ class FontManager:
 
     def _get_tounicode(self, pdfobject):
         key = pdfobject.ident()
-        if self.tounicode.has_key(key):
+        if key in self.tounicode:
             tuc = self.tounicode.get(key)
         else:
             tuc = ToUnicode(pdfobject)

@@ -63,7 +63,7 @@ class TexCodec:
             self.charmap = {}
             return
 
-        if not(tex_handler_installed.has_key(self._errors)):
+        if not(self._errors in tex_handler_installed):
             f = self.build_error_func(pre, post, errors)
             codecs.register_error(self._errors, f)
             tex_handler_installed[self._errors] = f

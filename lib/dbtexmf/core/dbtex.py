@@ -395,7 +395,7 @@ class DbTex:
         self.update_texinputs()
 
         # For easy debug
-        if self.debug and os.environ.has_key("TEXINPUTS"):
+        if self.debug and "TEXINPUTS" in os.environ:
             if os.name != "nt":
                 f = file("env_tex", "w")
                 f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \

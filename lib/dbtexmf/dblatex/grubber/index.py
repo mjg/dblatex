@@ -514,7 +514,7 @@ class Module (TexModule):
         index = self.indices[name] = Index(self.doc, idx, ind, ilg)
         for cmd in self.defaults:
             index.command(*cmd)
-        if self.commands.has_key(name):
+        if name in self.commands:
             for cmd in self.commands[name]:
                 index.command(*cmd)
 
@@ -548,9 +548,9 @@ class Module (TexModule):
             self.defaults.append([cmd, args])
             names = indices.keys()
         for index in names:
-            if indices.has_key(index):
+            if index in indices:
                 indices[index].command(cmd, args[1:])
-            elif self.commands.has_key(index):
+            elif index in self.commands:
                 self.commands[index].append([cmd, args])
             else:
                 self.commands[index] = [[cmd, args]]

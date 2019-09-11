@@ -273,7 +273,7 @@ class Imagedata:
             return fig
 
         # Check if this image has been already converted
-        if self.converted.has_key(realfig):
+        if realfig in self.converted:
             self.log.info("Image '%s' already converted as %s" % \
                   (fig, self.converted[realfig]))
             return self.converted[realfig]

@@ -96,7 +96,7 @@ class TextConfig:
                 continue
             key = m.group(1)
             value = m.group(2).strip()
-            if not self.conf_mapping.has_key(key):
+            if key not in self.conf_mapping:
                 continue
             o = self.conf_mapping[key]
 

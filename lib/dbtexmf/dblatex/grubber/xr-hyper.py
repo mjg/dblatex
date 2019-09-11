@@ -23,7 +23,7 @@ class Module(TexModule):
         # remember the engine used to build the main latex document
         self.texmodules = []
         for m in ("pdftex", "xetex"):
-            if doc.modules.has_key(m):
+            if m in doc.modules:
                 self.texmodules.append(m)
 
         # want to track each external document whose .aux is required
