@@ -218,8 +218,8 @@ class Xindy:
             if "WARNING" in block:
                 check_next_block = True
             elif check_next_block:
-                m = re.search("Found.*?-range .*"\
-                              "Location-reference is \d+ in keyword \((.*)\)",
+                m = re.search(r"Found.*?-range .*"\
+                              r"Location-reference is \d+ in keyword \((.*)\)",
                               block, re.M|re.DOTALL)
                 if m: self.invalid_index_ranges.append(Indexentry(m.group(1)))
                 check_next_block = False
@@ -264,7 +264,7 @@ class Indexentry:
     """
     Index entry wrapper from idxfile. Its role is to detect range anomalies
     """
-    _re_entry = re.compile("\indexentry{(.*)\|([\(\)]?).*}{(\d+)}", re.DOTALL)
+    _re_entry = re.compile(r"\\indexentry{(.*)\|([\(\)]?).*}{(\d+)}", re.DOTALL)
 
     def __init__(self, index_key):
         self.index_key = index_key
@@ -493,7 +493,7 @@ class Index(TexModule):
                 os.unlink(file)
 
 re_newindex = re.compile(" *{(?P<idx>[^{}]*)} *{(?P<ind>[^{}]*)}")
-re_optarg = re.compile("\((?P<list>[^()]*)\) *")
+re_optarg = re.compile(r"\((?P<list>[^()]*)\) *")
 
 class Module (TexModule):
     def __init__ (self, doc, dict):

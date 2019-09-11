@@ -79,7 +79,7 @@ class TextConfig:
 
     def __init__(self):
         self._options = []
-        self.reparam = re.compile("^\s*([^:=\s]+)\s*:\s*(.*)")
+        self.reparam = re.compile(r"^\s*([^:=\s]+)\s*:\s*(.*)")
 
     def options(self):
         return self._options

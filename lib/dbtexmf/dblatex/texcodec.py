@@ -94,7 +94,7 @@ class LatexCodec(TexCodec):
 
         self.texres = (
             # Kind of normalize
-            (re.compile("^[\s\n]*$"), r" "),
+            (re.compile(r"^[\s\n]*$"), r" "),
             # TeX escapes (the order is important)
             (re.compile(r"([{}%_^$&#])"), r"\\\1"),
             # '<' and '>' in the list to avoid french quotation mark symptoms

@@ -105,7 +105,7 @@ class PDFFile(PDFBaseObject):
         self.fontmgr = FontManager({})
 
         # Detect the beginning of a PDF Object
-        self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
+        self.re_objstart = re.compile(r"(\d+) (\d+) obj(.*$)", re.DOTALL)
 
     def cleanup(self):
         self.stream_manager.cleanup()
@@ -124,7 +124,7 @@ class PDFFile(PDFBaseObject):
             self._file.seek(offset)
             data = self._file.read(offset_trailer) + data
 
-        m = re.search("\sstartxref\s+(\d+)\s+%%EOF", data, re.M)
+        m = re.search(r"\sstartxref\s+(\d+)\s+%%EOF", data, re.M)
         if not(m):
             self.error("Problem in PDF file: startxref not found")
             return 0
@@ -138,7 +138,7 @@ class PDFFile(PDFBaseObject):
         while startxref:
             self._file.seek(startxref)
             line = self._file.readline()
-            m = re.search("xref\s(.*)", line, re.M|re.DOTALL)
+            m = re.search(r"xref\s(.*)", line, re.M|re.DOTALL)
             if (m):
                 found_xref = PDFXrefSection(self._file)
                 found_xref.read_table(m.group(1))
@@ -700,7 +700,7 @@ class PDFObject:
     def compute(self):
         string = self.string
 
-        s = re.split("stream\s", string, re.MULTILINE)
+        s = re.split(r"stream\s", string, re.MULTILINE)
         if len(s) > 1:
             self.debug("Contains stream")
             self.stream = s[1].strip()
@@ -730,7 +730,7 @@ class PDFObject:
         else:
             self.descriptor = PDFDescriptor()
 
-        self.data = re.sub("{descriptor\(\d+\)}", "",
+        self.data = re.sub(r"{descriptor\(\d+\)}", "",
                            string, flags=re.MULTILINE).strip()
         self.debug("Data: '%s'" % self.data)
 
@@ -804,16 +804,16 @@ class PDFDescriptor:
     #  /MediaBox [0 0 595.276 841.89] : the value is an array
     #  /Parent 12 0 R
     # >>
-    _re_dict = re.compile("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+")
+    _re_dict = re.compile(r"/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+")
 
     # Extract a dictionnary keyword
-    _re_key = re.compile("(/[^ \({/\[<]*)")
+    _re_key = re.compile(r"(/[^ \({/\[<]*)")
 
     # Extract the substituted descriptors
-    _re_descobj = re.compile("{descriptor\((\d+)\)}")
+    _re_descobj = re.compile(r"{descriptor\((\d+)\)}")
 
     # Find the PDF object references
-    _re_objref = re.compile("(\d+ \d+ R)")
+    _re_objref = re.compile(r"(\d+ \d+ R)")
 
     def __init__(self, string=""):
         self._ident = self._get_ident()
@@ -1093,7 +1093,7 @@ class PDFContentStream(PDFStreamHandler):
         self.make_graph_tree()
 
     def extract_textobjects(self, data):
-        fields = re.split("((?<=\s)BT(?=\s)|(?<=\s)ET(?=\s))", data)
+        fields = re.split(r"((?<=\s)BT(?=\s)|(?<=\s)ET(?=\s))", data)
 
         start_text = False
         textdata = ""
@@ -1118,7 +1118,7 @@ class PDFContentStream(PDFStreamHandler):
         self.data = data
 
     def make_graph_tree(self):
-        graph_stacks = re.split("(q\s|\sQ)", self.data)
+        graph_stacks = re.split(r"(q\s|\sQ)", self.data)
 
         self.qnode_root = GraphState()
         qnode = self.qnode_root
@@ -1234,15 +1234,15 @@ class GraphState:
 
     def fill_textobjects(self, textobjects):
         #print self._data #***
-        tos = re.findall(" (textobj\(\d+\))", self._data)
+        tos = re.findall(r" (textobj\(\d+\))", self._data)
         for to in tos:
-            m = re.match("textobj\((\d+)\)", to)
+            m = re.match(r"textobj\((\d+)\)", to)
             if m:
                 textobject = textobjects[int(m.group(1))]
                 textobject.set_graphstate(self)
                 self.textobjects.append(textobject)
 
-        self._data = re.sub(" textobj\(\d+\)", "",
+        self._data = re.sub(r" textobj\(\d+\)", "",
                        self._data, flags=re.MULTILINE).strip()
 
     def extract_matrix(self):
@@ -1264,26 +1264,26 @@ class PDFTextObject:
     """
     Data between the 'BT' and 'ET' tokens found in content streams.
     """
-    _font_op_pattern = "/[^\s]+\s+[^\s]+\s+Tf"
+    _font_op_pattern = r"/[^\s]+\s+[^\s]+\s+Tf"
 
     # Detect a 'Tf', 'Tm', 'Tj', 'TJ', Td, TD operator sequence in a text object
     # To use only when strings are extracted and replaced by their reference
     _re_seq = re.compile("(" + _font_op_pattern + "|"+\
-                         6*"[^\s]+\s+"+"Tm"+"|"+\
-                         "\(textcontent\{\d+\}\)\s*Tj|"+\
-                         "\[[^\]]*\]\s*TJ|"+\
-                         "[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
+                         6*r"[^\s]+\s+"+"Tm"+"|"+\
+                         r"\(textcontent\{\d+\}\)\s*Tj|"+\
+                         r"\[[^\]]*\]\s*TJ|"+\
+                         r"[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
 
     # Find a font setup operator, like '/F10 9.47 Tf'
     _re_font = re.compile("("+_font_op_pattern+")", re.MULTILINE)
 
     # Find a sequence '(...\(...\)...) Tj'
-    _re_text_show1 = re.compile("(\((?:" + "[^()]" + "|" +\
+    _re_text_show1 = re.compile(r"(\((?:" + "[^()]" + "|" +\
                                       r"(?<=\\)\(" + "|" +\
                                       r"(?<=\\)\)" + ")*\)\s*Tj)", re.M)
                                 
     # Find a sequence '[...\[...\]...] TJ'
-    _re_text_show2 = re.compile("\[((?:" + "[^\[\]]" + "|" +\
+    _re_text_show2 = re.compile(r"\[((?:" + "[^\[\]]" + "|" +\
                                         r"(?<=\\)\[" + "|" +\
                                         r"(?<=\\)\]" + ")*)\]\s*TJ", re.M)
 
@@ -1319,7 +1319,7 @@ class PDFTextObject:
         return m
 
     def extract_matrix(self):
-        m = re.search("("+6*"[^\s]+\s+"+"Tm"+")", self.data)
+        m = re.search("("+6*r"[^\s]+\s+"+"Tm"+")", self.data)
         if m:
             vector = [ float(v) for v in m.group(1).split()[0:6] ]
             self.matrix = PDFMatrix(vector)
@@ -1380,7 +1380,7 @@ class PDFTextObject:
             # When text is shown, the current font/size setup applies and is
             # then recorded
             elif "Tj" in key or "TJ" in key:
-                m = re.search("textcontent\{(\d+)\}", tx)
+                m = re.search(r"textcontent\{(\d+)\}", tx)
                 text_string = self.strings[int(m.group(1))]
                 scale = self.matrix.scale()
                 #print font, size, scale #*****
@@ -1440,7 +1440,7 @@ class PDFTextShow:
 
     def text(self):
         textdata = self._re_textascii.findall(self.data)
-        textdata = "".join(textdata).replace("\(", "(").replace("\)", ")")
+        textdata = "".join(textdata).replace(r"\(", "(").replace(r"\)", ")")
         if textdata:
             return textdata
         if (self.font.tounicode):
@@ -1540,7 +1540,7 @@ class ToUnicode(PDFStreamHandler):
     translate the text content to readable text
     """
     _re_token = re.compile("(" + \
-             "(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
+             r"(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
              "(?:endcodespacerange|endbfchar|endbfrange)" + \
              ")", re.M)
 
@@ -1576,14 +1576,14 @@ class ToUnicode(PDFStreamHandler):
                 self.add_bfrange(bfrange)
                 bfrange = None
             elif bfchar:
-                fld = re.sub("<\s+", "<", fld)
-                fld = re.sub("\s+>", ">", fld)
+                fld = re.sub(r"<\s+", "<", fld)
+                fld = re.sub(r"\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 2):
                     bfchar.add_mapstr(data[i], data[i], data[i+1])
             elif bfrange:
-                fld = re.sub("<\s+", "<", fld)
-                fld = re.sub("\s+>", ">", fld)
+                fld = re.sub(r"<\s+", "<", fld)
+                fld = re.sub(r"\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 3):
                     bfrange.add_mapstr(data[i], data[i+1], data[i+2])

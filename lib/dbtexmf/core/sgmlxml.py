@@ -19,7 +19,7 @@ class Osx:
 
     def replace_entities(self, entfile, mapfile, outfile=None):
         # Find out the SDATA entities to replace
-        re_ent = re.compile('<!ENTITY +([^\s]+) +"?\[([^\s"]+) *\]"?>')
+        re_ent = re.compile(r'<!ENTITY +([^\s]+) +"?\[([^\s"]+) *\]"?>')
         f = open(entfile)
         lines = f.readlines()
         f.close()
@@ -34,7 +34,7 @@ class Osx:
         self.log.debug("Entities to map: %s" % ents)
 
         # Now, get their Unicode mapping
-        entpat = "^(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
+        entpat = r"^(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
         re_map = re.compile(entpat)
         entmap = []
         f = open(mapfile)
@@ -47,7 +47,7 @@ class Osx:
         entdict = {}
         for ent, uval in entmap:
             entdict[ent] = \
-                (re.compile('<!ENTITY\s+%s\s+"?\[[^\]]+\]"?\s*>' % ent),
+                (re.compile(r'<!ENTITY\s+%s\s+"?\[[^\]]+\]"?\s*>' % ent),
                             '<!ENTITY %s "&#%s;">' % (ent, uval))
 
         nlines = []

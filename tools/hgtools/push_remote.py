@@ -27,7 +27,7 @@ def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
 
     patch_revs = []
     for line in data.split("\n"):
-        m = re.search("changeset: *(\d+):", line)
+        m = re.search(r"changeset: *(\d+):", line)
         if m: patch_revs.append(m.group(1))
 
     if not(patch_revs):
@@ -39,7 +39,7 @@ def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
     exec_command(cmd)
 
 def hg_tag_command(repo_proxy, patch, user=""):
-    cmd = ["grep", "-c", "^diff.*\.hgtags", patch]
+    cmd = ["grep", "-c", r"^diff.*\.hgtags", patch]
     print " ".join(cmd)
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
@@ -49,21 +49,21 @@ def hg_tag_command(repo_proxy, patch, user=""):
 
     action, tag1, tag2, tag_date = "", "", "", ""
     for line in open(patch).readlines():
-        m = re.search("Added tag ([^\s]+) for changeset", line)
+        m = re.search(r"Added tag ([^\s]+) for changeset", line)
         if m:
             action = "add"
             tag1 = m.group(1)
             continue
-        m = re.search("Removed tag ([^\s]+)", line)
+        m = re.search(r"Removed tag ([^\s]+)", line)
         if m:
             action = "remove"
             tag1 = m.group(1)
             continue
-        m = re.search("^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
+        m = re.search(r"^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
         if m:
             tag_date = m.group(1)
             continue
-        m = re.search("^\+.* (.*)", line)
+        m = re.search(r"^\+.* (.*)", line)
         if m:
             tag2 = m.group(1)
             continue

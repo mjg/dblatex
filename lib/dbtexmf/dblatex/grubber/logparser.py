@@ -21,12 +21,12 @@ class LogParser:
     re_loghead = re.compile("This is [0-9a-zA-Z-]*(TeX|Omega)")
     re_rerun = re.compile(
         "(LaTeX|Package longtable|Package bibtopic) Warning:.*Rerun")
-    re_rerun2 = re.compile("\(Changebar\).*Rerun")
+    re_rerun2 = re.compile(r"\(Changebar\).*Rerun")
     re_file = re.compile("(\\((?P<file>[^ \n\t(){}]*)|\\))")
     re_badbox = re.compile(r"(Ov|Und)erfull \\[hv]box ")
     re_line = re.compile(r"(l\.(?P<line>[0-9]+)( (?P<code>.*))?$|<\*>)")
     re_cseq = re.compile(r".*(?P<seq>\\[^ ]*) ?$")
-    re_page = re.compile("\[(?P<num>[0-9]+)\]")
+    re_page = re.compile(r"\[(?P<num>[0-9]+)\]")
     re_atline = re.compile(
     "( detected| in paragraph)? at lines? (?P<line>[0-9]*)(--(?P<last>[0-9]*))?")
     re_reference = re.compile("LaTeX Warning: Reference `(?P<ref>.*)' \

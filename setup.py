@@ -451,7 +451,7 @@ class InstallData(install_data):
 
         # Grab the value from package version
         d = open(hyper_sty).read()
-        m = re.search("\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
+        m = re.search(r"\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
         if not(m):
             return
         year = m.group(1)

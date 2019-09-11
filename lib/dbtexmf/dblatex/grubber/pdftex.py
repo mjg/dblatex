@@ -73,7 +73,7 @@ class Module (TexModule):
         # Grab the major version number
         p = Popen("pdflatex -version", shell=True, stdout=PIPE)
         data = p.communicate()[0]
-        m = re.search("pdfTeX.*3.14[^-]*-(\d*.\d*)", data, re.M)
+        m = re.search(r"pdfTeX.*3.14[^-]*-(\d*.\d*)", data, re.M)
         if not(m):
             return ""
         else:
