@@ -378,7 +378,7 @@ class Install(install):
                 self.check_xslt_dependencies()
                 self.check_util_dependencies()
                 self.check_latex_dependencies()
-            except Exception, e:
+            except Exception as e:
                 print >>sys.stderr, "Error: %s" % e
                 sys.exit(1)
 

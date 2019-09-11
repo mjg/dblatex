@@ -544,13 +544,13 @@ class DbTexCommand:
         if options.format:
             try:
                 run.set_format(options.format)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
 
         # Always set the XSLT (default or not)
         try:
             run.set_xslt(options.xslt)
-        except Exception, e:
+        except Exception as e:
             failed_exit("Error: %s" % e)
 
         if options.xslopts:
@@ -575,7 +575,7 @@ class DbTexCommand:
         if options.texstyle:
             try:
                 xslparam, texpath = texstyle_parse(options.texstyle)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
             run.xslparams.append(xslparam)
             if texpath: run.texinputs.append(texpath)
@@ -630,7 +630,7 @@ class DbTexCommand:
             if not(os.path.exists(options.tmpdir)):
                 try:
                     os.mkdir(options.tmpdir)
-                except Exception, e:
+                except Exception as e:
                     failed_exit("Error: %s" % e)
             run.tmpdir_user = os.path.abspath(options.tmpdir)
 
@@ -682,14 +682,14 @@ class DbTexCommand:
             try:
                 conf.paths = self.get_config_paths()
                 conf.fromstyle(options.style)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
             
         if options.config:
             try:
                 for config in options.config:
                     conf.fromfile(config)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
 
         if conf.options:
@@ -735,7 +735,7 @@ class DbTexCommand:
         # Try to buid the file
         try:
             run.compile()
-        except Exception, e:
+        except Exception as e:
             signal_error(self, e)
             failed_exit("Error: %s" % e)
 

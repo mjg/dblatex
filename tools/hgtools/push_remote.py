@@ -144,7 +144,7 @@ def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
         if push_remote:
             hg_command(repo_proxy, "push")
         rc = 0
-    except Exception, e:
+    except Exception as e:
         rc = -1
         print >>sys.stderr, e
 

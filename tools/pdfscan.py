@@ -2163,7 +2163,7 @@ def main():
     try:
         pdffile = remain_args[0]
         scanner.run(parser, options, argslist, pdffile)
-    except Exception, e:
+    except Exception as e:
         error.failure_track("Error: '%s'" % (e))
 
     scanner.cleanup()

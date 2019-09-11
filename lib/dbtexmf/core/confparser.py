@@ -81,11 +81,11 @@ class DbtexConfig:
     def fromfile(self, filename):
         try:
             self.fromxmlfile(filename)
-        except ParseError, e:
+        except ParseError as e:
             self.warn("Text configuration files are deprecated. "\
                       "Use the XML format instead")
             self.fromtxtfile(filename)
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def fromxmlfile(self, filename):
