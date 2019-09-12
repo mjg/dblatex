@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import StringIO
 import codecs
@@ -45,4 +47,4 @@ input = u'aei#\\\u4EAC{\\}_uuu\u4EAC'
 
 c = XetexCodec(StringIO.StringIO(conf))
 s = c.encode(input)
-print s.decode("utf8")
+print(s.decode("utf8"))

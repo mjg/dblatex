@@ -2,6 +2,8 @@
 # dblatex - Hyphenation classes to provide smart hyphenation of path like
 # strings
 #
+from __future__ import print_function
+
 import re
 
 class Hyphenator:
@@ -96,5 +98,5 @@ if __name__ == "__main__":
     url = "http://www.fg/foobar fun#fght/fkkkf.tz?id=123"
     h1 = BasicHyphenator()
     h2 = UrlHyphenator()
-    print h1.hyphenate(url)
-    print h2.hyphenate(url)
+    print(h1.hyphenate(url))
+    print(h2.hyphenate(url))

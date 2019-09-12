@@ -3,6 +3,8 @@
 #
 # dblatex python setup script - See the COPYRIGHT
 #
+from __future__ import print_function
+
 import os
 import sys
 import re
@@ -83,7 +85,7 @@ os.environ["SGML_CATALOG_FILES"] = cat
         self._catalogs = install.catalogs
         self._style = install.style
         self._use_py_path = install.use_python_path
-        print self._package_base
+        print(self._package_base)
 
         # Build the command line script
         self.build_script()
@@ -260,19 +262,19 @@ class Install(install):
         # First, check non critical graphic tools
         found, missed = find_programs(("epstopdf", "convert", "fig2dev"))
         for util in found:
-            print "+checking %s... yes" % util
+            print("+checking %s... yes" % util)
         for util in missed:
-            print "+checking %s... no" % util
+            print("+checking %s... no" % util)
         if missed:
-            print("warning: not found: %s" % ", ".join(missed))
+            print(("warning: not found: %s" % ", ".join(missed)))
 
         # Now, be serious
         found, missed = find_programs(("latex", "makeindex",
                                        "pdflatex", "kpsewhich"))
         for util in found:
-            print "+checking %s... yes" % util
+            print("+checking %s... yes" % util)
         for util in missed:
-            print "+checking %s... no" % util
+            print("+checking %s... no" % util)
         if missed:
             raise OSError("not found: %s" % ", ".join(missed))
 
@@ -292,21 +294,21 @@ class Install(install):
         for (mod, deplist) in deplists:
             if not(deplist):
                 xslt_found.append(mod)
-                print "+checking XSLT %s... yes" % mod
+                print("+checking XSLT %s... yes" % mod)
                 continue
             found, missed = find_programs(deplist)
             if missed:
                 xslt_missed.append(mod)
-                print "+checking XSLT %s... no (missing %s)" % \
-                      (mod, ", ".join(missed))
+                print("+checking XSLT %s... no (missing %s)" % \
+                      (mod, ", ".join(missed)))
             else:
                 xslt_found.append(mod)
-                print "+checking XSLT %s... yes" % mod
+                print("+checking XSLT %s... yes" % mod)
 
         if not(xslt_found):
             raise OSError("XSLT not installed: %s" % ", ".join(xslt_missed))
         elif xslt_missed:
-            print "warning: XSLT not found: %s" % ", ".join(xslt_missed)
+            print("warning: XSLT not found: %s" % ", ".join(xslt_missed))
 
     def check_latex_dependencies(self):
         # Find the Latex files from the package
@@ -353,7 +355,7 @@ class Install(install):
             if sty in own_stys:
                 status += "found in package"
                 found_stys.append(sty)
-                print status
+                print(status)
                 continue
             stypath = kpsewhich("%s.sty" % sty)
             if stypath:
@@ -362,7 +364,7 @@ class Install(install):
             else:
                 status += "no"
                 mis_stys.append(sty)
-            print status
+            print(status)
             
         if mis_stys:
             raise OSError("not found: %s" % ", ".join(mis_stys))
@@ -379,7 +381,7 @@ class Install(install):
                 self.check_util_dependencies()
                 self.check_latex_dependencies()
             except Exception as e:
-                print >>sys.stderr, "Error: %s" % e
+                print("Error: %s" % e, file=sys.stderr)
                 sys.exit(1)
 
         if db: db.adapt_paths()

@@ -18,6 +18,8 @@
 #                                                      PDF_Day_A_Look_Inside.pdf
 #
 #
+from __future__ import print_function
+
 import os
 import sys
 import traceback
@@ -40,7 +42,7 @@ class ErrorHandler:
 
     def failure_track(self, msg, rc=1):
         self.rc = rc
-        print >>sys.stderr, (msg)
+        print((msg), file=sys.stderr)
         if self._dump_stack:
             traceback.print_exc()
 
@@ -960,7 +962,7 @@ class StreamManager(PDFBaseObject):
             shutil.rmtree(self.cache_dirname)
         else:
             for fname in self.cache_files:
-                print "shutil.remove(", fname
+                print("shutil.remove(", fname)
 
     def cache(self, **kwargs):
         if self.cache_method == "file":
@@ -1253,11 +1255,11 @@ class GraphState:
 
     def dump(self):
         s = self._level * "  " + "q '" + self._data + "'"
-        print s
+        print(s)
         for q in self._children:
             q.dump()
         s = self._level * "  " + "Q"
-        print s
+        print(s)
 
 
 class PDFTextObject:
@@ -1696,16 +1698,16 @@ class PageLayoutCmd(BasicCmd):
         for page in pdf_pages:
             fonts_used = page.find_fonts()
             fonts_used.sort()
-            print "\nPage %d fonts used:" % page.pagenum
+            print("\nPage %d fonts used:" % page.pagenum)
             for i, font in enumerate(fonts_used):
-                print "[%d] %-40s %6.2f pt" % (i, font.name(),
-                                               self.pt_factor*font.size())
+                print("[%d] %-40s %6.2f pt" % (i, font.name(),
+                                               self.pt_factor*font.size()))
 
-            print "\nPage %d layout:" % page.pagenum
+            print("\nPage %d layout:" % page.pagenum)
             content_stream = page.streams[0]
             xp, yp = 0., 0.
-            print self.header
-            print self.headline
+            print(self.header)
+            print(self.headline)
             for textobject in content_stream.textobjects:
                 xp, yp = self._print_textobject_layout(textobject, xp, yp,
                                                        fonts_used)
@@ -1728,7 +1730,7 @@ class PageLayoutCmd(BasicCmd):
                         font_line.append(idx)
 
             m2 = line[0].matrix * m2
-            if self.show_matrix: print "%s" % m2
+            if self.show_matrix: print("%s" % m2)
 
             x, y = m2.tx(), m2.ty()
             x, y = float(x/72), float(y/72)
@@ -1742,9 +1744,9 @@ class PageLayoutCmd(BasicCmd):
             textw = textwrap.wrap(text, wraplen)
 
             if textw:
-                print "%s%s" % (info, textw[0])
+                print("%s%s" % (info, textw[0]))
                 for txt in textw[1:]:
-                    print "%s%s" % (self.padding, txt)
+                    print("%s%s" % (self.padding, txt))
 
             xp, yp = x, y
             for l in line[1:]:
@@ -1765,9 +1767,9 @@ class PageObjectCmd(BasicCmd):
             page_num = i+page_first
             contents = page.descriptor.get("/Contents")
             resources = page.descriptor.get("/Resources")
-            print "Page %d %s: contents: %s, resources: %s" % \
-                                 (page_num, page, contents, resources)
-        print
+            print("Page %d %s: contents: %s, resources: %s" % \
+                                 (page_num, page, contents, resources))
+        print()
 
 class PdfObjectCmd(BasicCmd):
     """
@@ -1804,8 +1806,8 @@ class PdfObjectCmd(BasicCmd):
     def _sanitize_objref(self, ident):
         flds = ident.split()
         if len(flds) != 2:
-            print "Invalid object reference: must be in the form "\
-                  "'number generation'"
+            print("Invalid object reference: must be in the form "\
+                  "'number generation'")
             return ""
         else:
             return "%s %s" % (flds[0], flds[1])
@@ -1813,51 +1815,51 @@ class PdfObjectCmd(BasicCmd):
     def show_dictionnary(self, ident):
         pdfobject = self.scanner.pdf.get_object(ident)
         if not(pdfobject):
-            print "PDF Object '%s' not found" % ident
+            print("PDF Object '%s' not found" % ident)
             return
         if pdfobject.stream:
-            print "PDF Object '%s' has a stream. Its dictionnary:" % ident
+            print("PDF Object '%s' has a stream. Its dictionnary:" % ident)
         else:
-            print "PDF Object '%s' dictionnary:" % ident
+            print("PDF Object '%s' dictionnary:" % ident)
         self._print_dictionnary(pdfobject.descriptor)
 
     def _print_dictionnary(self, descriptor, level=1):
         indent = "  "*level
-        print "%s<<" % indent
+        print("%s<<" % indent)
         for p, v in descriptor.infos().items():
             if isinstance(v, PDFDescriptor):
-                print "%s%s:" % (indent, p)
+                print("%s%s:" % (indent, p))
                 self._print_dictionnary(v, level=level+1)
             else:
-                print "%s%s: %s" % (indent, p, v)
-        print "%s>>" % indent
+                print("%s%s: %s" % (indent, p, v))
+        print("%s>>" % indent)
 
     def list_pdfobjects(self):
         pdfobjects = self.scanner.pdf.pdfobjects
-        print "Found %s PDFObjects" % pdfobjects.count()
-        print "Found the following PDFObject types:"
+        print("Found %s PDFObjects" % pdfobjects.count())
+        print("Found the following PDFObject types:")
         types = pdfobjects.types()
         types.sort()
         total = 0
         for typ in types:
             n_type = len(pdfobjects.get_objects_by_type(typ))
-            print " %20s: %5d objects" % (typ, n_type)
+            print(" %20s: %5d objects" % (typ, n_type))
             total = total + n_type
-        print " %20s: %5d objects" % ("TOTAL", total)
+        print(" %20s: %5d objects" % ("TOTAL", total))
 
     def dump_stream(self, ident, outfile):
         pdfobject = self.scanner.pdf.get_object(ident)
         if not(pdfobject):
-            print "PDF Object '%s' not found" % ident
+            print("PDF Object '%s' not found" % ident)
             return
         if not(pdfobject.stream):
-            print "PDF Object '%s' has no stream. Give up." % ident
+            print("PDF Object '%s' has no stream. Give up." % ident)
             return
         pdfobject.stream_decode()
         f = open(outfile, "wb")
         f.write(pdfobject.stream_text())
         f.close()
-        print "PDF Object '%s' stream written to file %s" % (ident, outfile)
+        print("PDF Object '%s' stream written to file %s" % (ident, outfile))
 
 
 
@@ -1895,17 +1897,17 @@ class PageFontCmd(BasicCmd):
 
     def print_fonts_in_pages(self, pdf_pages, show=True):
         if show:
-            print self.header_fmt % ("PAGE", "FONT", "SIZE")
-            print self.header_fmt % (4*"-", 40*"-", 10*"-")
+            print(self.header_fmt % ("PAGE", "FONT", "SIZE"))
+            print(self.header_fmt % (4*"-", 40*"-", 10*"-"))
 
         for page in pdf_pages:
             fonts_used = page.find_fonts()
             fonts_used.sort()
             for font in fonts_used:
                 if show:
-                    print "%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
-                              self.pt_factor * font.size(), self.font_unit)
-            if show: print self.header_fmt % (4*"-", 40*"-", 10*"-")
+                    print("%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
+                              self.pt_factor * font.size(), self.font_unit))
+            if show: print(self.header_fmt % (4*"-", 40*"-", 10*"-"))
 
     def print_font_summary(self):
         pages = []
@@ -1917,12 +1919,12 @@ class PageFontCmd(BasicCmd):
                 s += "-%d" % (pg[-1].pagenum)
             pages.append(s)
 
-        print "\nFonts used in pages %s:" % (",".join(pages))
+        print("\nFonts used in pages %s:" % (",".join(pages)))
         fonts_used = self.scanner.pdf.fontmgr.get_used()
         fonts_used.sort()
         for font in fonts_used:
-            print "%-40s %6.2f %s" % \
-                  (font.name(), self.pt_factor*font.size(), self.font_unit)
+            print("%-40s %6.2f %s" % \
+                  (font.name(), self.pt_factor*font.size(), self.font_unit))
 
 
 class PDFScannerCommand:
@@ -2071,7 +2073,7 @@ class PDFScannerCommand:
         for verbose_opt in verbose:
             group, level = ("all:" + verbose_opt).split(":")[-2:]
             if not(level in log_levels):
-                print "Invalid verbose level: '%s'" % level
+                print("Invalid verbose level: '%s'" % level)
                 continue
             if group == "all":
                 for group in groups:
@@ -2079,7 +2081,7 @@ class PDFScannerCommand:
             elif group in groups:
                 log_groups[group] = level
             else:
-                print "Invalid verbose group: '%s'" % group
+                print("Invalid verbose group: '%s'" % group)
                 continue
         return log_groups
 
@@ -2108,8 +2110,8 @@ class PDFScannerCommand:
         elif cache_dirname:
             cache_dirname = os.path.realpath(cache_dirname)
             if not(os.path.exists(cache_dirname)):
-                print "Invalid cache dir: '%s'. Temporary dir used instead" % \
-                      cache_dirname
+                print("Invalid cache dir: '%s'. Temporary dir used instead" % \
+                      cache_dirname)
                 return None
             mgr = StreamManager(cache_method="file",
                                 cache_dirname=cache_dirname,
@@ -2154,7 +2156,7 @@ def main():
         argslist.append(args)
 
     if not(remain_args) or remain_args[0] in scanner.commands():
-        print "Missing the PDF File"
+        print("Missing the PDF File")
         parser.parse_args(["-h"])
 
     error = ErrorHandler()

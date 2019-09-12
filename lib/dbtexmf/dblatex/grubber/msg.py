@@ -1,5 +1,7 @@
 # This file is part of Rubber and thus covered by the GPL
 # (c) Emmanuel Beffara, 2002--2006
+from __future__ import print_function
+
 """
 This module defines the messages diplay class, and creates the application-wide
 msg object.
@@ -37,9 +39,9 @@ class Message (object):
             self.stdout = None
 
     def write_stdout(self, text, level=0):
-        print text
+        print(text)
     def write_stderr(self, text, level=0):
-        print >>sys.stderr, text
+        print(text, file=sys.stderr)
 
     def push_pos (self, pos):
         self.pos.append(pos)

@@ -2,6 +2,8 @@
 # DbTex base class handling the compilation of a DocBook file via
 # XSL Transformation and some TeX engine compilation.
 #
+from __future__ import print_function
+
 import sys
 import os
 import re
@@ -665,7 +667,7 @@ class DbTexCommand:
 
         if options.version:
             version = run.get_version()
-            print "%s version %s" % (self.prog, version)
+            print("%s version %s" % (self.prog, version))
             if not(args):
                 sys.exit(0)
 

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import sys
 from xml.etree.ElementTree import ParseError
@@ -76,7 +78,7 @@ class DbtexConfig:
         self.style_exts = ["", ".xml", ".specs", ".conf"]
 
     def warn(self, text):
-        print >>sys.stderr, text
+        print(text, file=sys.stderr)
 
     def fromfile(self, filename):
         try:

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import os
 import re
@@ -12,7 +14,7 @@ dry_run = False
 def exec_command(cmd):
     global dry_run
     cmd = " ".join(cmd)
-    print cmd
+    print(cmd)
     if not(dry_run):
         rc = subprocess.call(cmd, shell=True)
         if rc != 0:
@@ -21,7 +23,7 @@ def exec_command(cmd):
 def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
     cmd = ["hg", "-R", repo_sas, "incoming"]
     if add_source: cmd.append(repo_src)
-    print " ".join(cmd)
+    print(" ".join(cmd))
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
 
@@ -40,7 +42,7 @@ def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
 
 def hg_tag_command(repo_proxy, patch, user=""):
     cmd = ["grep", "-c", r"^diff.*\.hgtags", patch]
-    print " ".join(cmd)
+    print(" ".join(cmd))
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
 
@@ -69,7 +71,7 @@ def hg_tag_command(repo_proxy, patch, user=""):
             continue
 
     if not(tag1 and tag1 == tag2):
-        print "Something wrong: '%s' vs '%s'" % (tag1, tag2)
+        print("Something wrong: '%s' vs '%s'" % (tag1, tag2))
         return []
 
     cmd = ["hg", "-R", repo_proxy, "tag", "-d", '"'+tag_date+'"']
@@ -146,13 +148,13 @@ def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
         rc = 0
     except Exception as e:
         rc = -1
-        print >>sys.stderr, e
+        print(e, file=sys.stderr)
 
     os.chdir(curdir)
     if not(debug):
         shutil.rmtree(tmpdir)
     else:
-        print "%s not removed" % (tmpdir)
+        print("%s not removed" % (tmpdir))
     return rc
 
 
@@ -203,15 +205,15 @@ def main():
             for p in patches:
                 try: d = int(p)
                 except:
-                    print "Invalid revision identifier: %s" % p
+                    print("Invalid revision identifier: %s" % p)
                     errors = errors + 1
             exclude_patches += patches
 
     if not(options.intermediate):
-        print >> sys.stderr, "Option -i required"
+        print("Option -i required", file=sys.stderr)
         errors = errors + 1
     if not(options.destination):
-        print >> sys.stderr, "Option -d required"
+        print("Option -d required", file=sys.stderr)
         errors = errors + 1
 
     if errors > 0:

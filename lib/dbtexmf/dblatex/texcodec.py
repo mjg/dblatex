@@ -2,6 +2,8 @@
 # The Latex Codec handles the encoding from UFT-8 text to latin1
 # latex compatible text.
 #
+from __future__ import print_function
+
 import re
 import codecs
 import unient
@@ -21,7 +23,7 @@ def latex_char_replace(exc, pre, post, name):
         try:
             l.append(unient.unicode_map[ord(c)])
         except KeyError:
-            print "Missing character &#x%x;" % ord(c)
+            print("Missing character &#x%x;" % ord(c))
             l.append(u"\&\#x%x;" % ord(c))
         if post: l.append(post)
         n = n + 1
