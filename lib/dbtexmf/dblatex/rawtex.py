@@ -8,10 +8,10 @@ import sys
 import os
 import re
 
-from rawparse import RawLatexParser, RawUtfParser
-from rawverb import VerbParser
-from rawlabel import RawLabelParser
-from xetex.codec import XetexCodec
+from .rawparse import RawLatexParser, RawUtfParser
+from .rawverb import VerbParser
+from .rawlabel import RawLabelParser
+from .xetex.codec import XetexCodec
 from dbtexmf.core.imagedata import *
 
 

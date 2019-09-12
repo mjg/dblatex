@@ -9,7 +9,7 @@ from __future__ import generators
 
 import re
 
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 class LogParser:
     """

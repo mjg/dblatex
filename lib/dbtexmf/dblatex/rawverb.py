@@ -11,9 +11,9 @@
 #
 import re
 
-from texcodec import TexCodec
-from texcodec import tex_handler_counter
-from rawparse import RawUtfParser
+from .texcodec import TexCodec
+from .texcodec import tex_handler_counter
+from .rawparse import RawUtfParser
 
 
 class VerbCodec(TexCodec):

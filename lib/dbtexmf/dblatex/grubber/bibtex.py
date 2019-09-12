@@ -21,8 +21,8 @@ import subprocess
 
 #from grubber import _
 #from grubber import *
-from msg import _, msg
-from plugins import TexModule
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
 
 re_bibdata = re.compile(r"\\bibdata{(?P<data>.*)}")
 re_citation = re.compile(r"\\citation{(?P<cite>.*)}")

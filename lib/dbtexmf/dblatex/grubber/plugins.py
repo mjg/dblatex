@@ -7,7 +7,7 @@ All the modules must be derived from the TexModule class.
 import imp
 
 from os.path import *
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 import sys
 

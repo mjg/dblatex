@@ -13,8 +13,8 @@ import sys
 import re
 import xml.dom.minidom
 
-from fontspec import UnicodeInterval
-from fsconfig import FontSpecConfig
+from .fontspec import UnicodeInterval
+from .fsconfig import FontSpecConfig
 
 
 class FontSpecEncoder:

@@ -14,8 +14,8 @@ import re
 import subprocess
 from subprocess import Popen, PIPE
 
-from msg import _, msg
-from plugins import TexModule
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
 
 
 class Module (TexModule):

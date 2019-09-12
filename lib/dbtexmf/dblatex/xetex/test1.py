@@ -9,8 +9,8 @@ base = os.path.dirname(os.path.abspath(os.path.join(__file__, "../../..")))
 
 sys.path.append(base)
 
-from codec import XetexCodec
-from fsencoder import FontSpecEncoder
+from dbtexmf.dblatex.xetex.codec import XetexCodec
+from dbtexmf.dblatex.xetex.fsencoder import FontSpecEncoder
 
 
 conf = '''

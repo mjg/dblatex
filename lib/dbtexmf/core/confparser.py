@@ -3,11 +3,11 @@ from __future__ import print_function
 import os
 import sys
 from xml.etree.ElementTree import ParseError
-from xmlparser import XmlConfig
-from txtparser import TextConfig
-from imagedata import ImageConverterPool, ImageConverter
-from imagedata import ImageFormatPool, FormatRule
-from imagedata import image_setup
+from .xmlparser import XmlConfig
+from .txtparser import TextConfig
+from .imagedata import ImageConverterPool, ImageConverter
+from .imagedata import ImageFormatPool, FormatRule
+from .imagedata import image_setup
 from dbtexmf.xslt.xsltconf import XsltCommandPool, XsltEngine
 from dbtexmf.xslt import xslt_setup
 

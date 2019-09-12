@@ -5,7 +5,7 @@ import shutil
 import logging
 import urllib
 from dbtexmf.core.error import signal_error
-from commander import CommandRunner
+from .commander import CommandRunner
 
 class ObjectFilter:
     """

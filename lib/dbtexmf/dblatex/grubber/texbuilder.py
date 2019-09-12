@@ -9,9 +9,9 @@ of the rubber internals.
 import subprocess
 import os
 import shlex
-from msg import _, msg
-from maker import Maker
-from latex import Latex
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.maker import Maker
+from dbtexmf.dblatex.grubber.latex import Latex
 
 
 class IndexBuilder:

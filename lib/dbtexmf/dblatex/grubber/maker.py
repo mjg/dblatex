@@ -10,7 +10,7 @@ import os
 import time
 import subprocess
 
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 class Depend (object): #{{{2
     """

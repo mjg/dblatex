@@ -45,9 +45,9 @@ import subprocess
 import xml.dom.minidom
 
 from subprocess import Popen, PIPE
-from msg import _, msg
-from plugins import TexModule
-from util import md5_file
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.util import md5_file
 
 
 class Xindy:

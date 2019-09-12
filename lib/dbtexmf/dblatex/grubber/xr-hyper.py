@@ -9,9 +9,9 @@ file, so this support package registers these files as dependencies.
 """
 import os
 
-from msg import _, msg
-from plugins import TexModule
-from latex import Latex
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.latex import Latex
 
 class Module(TexModule):
     def __init__ (self, doc, dict):

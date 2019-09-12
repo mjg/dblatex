@@ -1,7 +1,7 @@
 from __future__ import print_function
 
-from fontspec import FontSpec
-from fcmanager import FcManager
+from .fontspec import FontSpec
+from .fcmanager import FcManager
 
 
 class DefaultFontSpec(FontSpec):

@@ -1,7 +1,7 @@
 import re
 
-from texcodec import LatexCodec, TexCodec
-from texhyphen import BasicHyphenator, UrlHyphenator
+from .texcodec import LatexCodec, TexCodec
+from .texhyphen import BasicHyphenator, UrlHyphenator
 
 
 def utf8(u):

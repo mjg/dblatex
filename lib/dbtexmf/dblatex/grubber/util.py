@@ -11,7 +11,7 @@ except ImportError:
     # Fallback for python 2.4:
     import md5 as hashlib
 import os
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 
 def md5_file(fname):

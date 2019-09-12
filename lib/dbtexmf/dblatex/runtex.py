@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 
-from grubber.texbuilder import LatexBuilder
+from .grubber.texbuilder import LatexBuilder
 
 
 class RunLatex:

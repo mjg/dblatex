@@ -6,7 +6,7 @@ from __future__ import print_function
 
 import re
 import codecs
-import unient
+from . import unient
 
 # Dictionnary of the handlers installed
 tex_handler_installed = {}
