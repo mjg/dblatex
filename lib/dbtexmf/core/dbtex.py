@@ -10,7 +10,10 @@ import re
 import shlex
 import tempfile
 import shutil
-import urllib
+try:
+    from urllib import pathname2url
+except ImportError:
+    from urllib.request import pathname2url
 import glob
 import imp
 from optparse import OptionParser
@@ -31,9 +34,9 @@ def suffix_replace(path, oldext, newext=""):
 
 def path_to_uri(path):
     if os.name == 'nt':
-        return 'file:' + urllib.pathname2url(path).replace('|', ':', 1)
+        return 'file:' + pathname2url(path).replace('|', ':', 1)
     else:
-        return urllib.pathname2url(path)
+        return pathname2url(path)
 
 
 class Document:

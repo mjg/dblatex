@@ -3,7 +3,10 @@ import os
 import re
 import shutil
 import logging
-import urllib
+try:
+    from urllib import url2pathname
+except ImportError:
+    from urllib.request import url2pathname
 from dbtexmf.core.error import signal_error
 from .commander import CommandRunner
 
@@ -259,7 +262,7 @@ class Imagedata:
 
     def convert(self, fig):
         # Translate the URL to an actual local path
-        fig = urllib.url2pathname(fig)
+        fig = url2pathname(fig)
 
         # Always use '/' in path: work even on windows and is required by tex
         if os.path.sep != '/': fig = fig.replace(os.path.sep, '/')

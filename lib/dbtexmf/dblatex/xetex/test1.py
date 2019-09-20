@@ -1,7 +1,10 @@
 from __future__ import print_function
 
 import sys
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import codecs
 import os
 
@@ -41,10 +44,10 @@ conf = '''
 </fonts>
 '''
 
-encoder = FontSpecEncoder(StringIO.StringIO(conf))
+encoder = FontSpecEncoder(StringIO(conf))
 sys.stdout = codecs.lookup('utf-8')[-1](sys.stdout)
 input = u'aei#\\\u4EAC{\\}_uuu\u4EAC'
 
-c = XetexCodec(StringIO.StringIO(conf))
+c = XetexCodec(StringIO(conf))
 s = c.encode(input)
 print(s.decode("utf8"))
