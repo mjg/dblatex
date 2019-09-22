@@ -224,12 +224,12 @@ u"""<?xml version="1.0"?>
         self.xslparams.reverse()
         for param in self.xslparams:
             v = param.split("=", 1)
-            f.write('<xsl:param name="%s">' % v[0])
+            f.write(u'<xsl:param name="%s">' % v[0])
             if len(v) == 2:
-                f.write('%s' % v[1])
-            f.write('</xsl:param>\n')
+                f.write(u'%s' % v[1])
+            f.write(u'</xsl:param>\n')
 
-        f.write('</xsl:stylesheet>\n')
+        f.write(u'</xsl:stylesheet>\n')
         f.close()
         self.xslbuild = os.path.realpath(wrapper)
 
@@ -387,7 +387,10 @@ u"""<?xml version="1.0"?>
 
         # Need to dump the stdin input, because of the two passes
         self.input = os.path.join(self.tmpdir, "stdin.xml")
-        f = open(self.input, "wt", encoding="latin-1")
+        if sys.stdin.encoding is None:
+            f = open(self.input, "wb")
+        else:
+            f = open(self.input, "wt", encoding=sys.stdin.encoding)
         for line in sys.stdin:
             f.write(line)
         f.close()
