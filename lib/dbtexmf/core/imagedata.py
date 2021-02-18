@@ -181,7 +181,7 @@ class FigConverter(ImageConverter):
 class SvgConverter(ImageConverter):
     def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
         ImageConverter.__init__(self, imgsrc="svg", imgdst=imgdst)
-        self.add_command(["inkscape", "-z", "-D", "--export-%(dst)s=%(output)s",
+        self.add_command(["rsvg-convert", "-a", "-f", "%(dst)s", "-o", "%(output)s",
                           "%(input)s"])
 
 
