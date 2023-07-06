@@ -4,7 +4,8 @@
 Mechanisms to dynamically load extra modules to help the LaTeX compilation.
 All the modules must be derived from the TexModule class.
 """
-import importlib
+import importlib.machinery
+import importlib.util
 
 from os.path import *
 from dbtexmf.dblatex.grubber.msg import _, msg

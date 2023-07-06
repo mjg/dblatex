@@ -15,7 +15,8 @@ try:
 except ImportError:
     from urllib.request import pathname2url
 import glob
-import importlib
+import importlib.machinery
+import importlib.util
 from optparse import OptionParser
 from io import open
 

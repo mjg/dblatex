@@ -2,7 +2,8 @@
 # Very simple plugin loader for Xslt classes
 #
 import os
-import importlib
+import importlib.machinery
+import importlib.util
 import glob
 import sys
 
