@@ -18,7 +18,7 @@
   <imagedata>
     <converter src="svg" dst="*" docformat="pdf">
       <command>
-        inkscape -z -D --export-dpi=600 --export-%(dst)s=%(output)s %(input)s
+        inkscape -D --export-dpi=600 --export-filename=%(output)s %(input)s
       </command>
     </converter>
   </imagedata>
